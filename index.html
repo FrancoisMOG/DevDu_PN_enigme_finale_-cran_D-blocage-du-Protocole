@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Écran final – Déblocage du Protocole</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #0b1220;
+    color: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 900px;
+    background: rgba(15,23,42,0.95);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  h1 { margin-top: 0; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: rgba(255,255,255,0.05);
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #4fc3f7, #22c55e);
+    color: #020617;
+  }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.1);
+    color: #9ca3af;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .feedback {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .locked {
+    opacity: 0.4;
+    position: relative;
+  }
+
+  .locked::after {
+    content: "🔒 Protocole verrouillé";
+    position: absolute;
+    inset: 0;
+    background: rgba(15,23,42,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+  }
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <h1>Écran final – Déblocage du Protocole</h1>
+  <p style="color:#9ca3af;">Entre les 3 codes obtenus dans les activités précédentes.</p>
+
+  <div class="layout">
+
+    <!-- PANEL GAUCHE -->
+    <div class="panel">
+      <h2>🔐 Saisie des 3 codes</h2>
+
+      <label>Énigme 1 – Code à 6 chiffres</label>
+      <input id="code1" type="text" placeholder="••••••" />
+
+      <label>Énigme 2 – Suite de 6 lettres</label>
+      <input id="code2" type="text" placeholder="A B C D E F" />
+
+      <label>Énigme 3 – Mot-code (4 lettres)</label>
+      <input id="code3" type="text" placeholder="C P D A" />
+
+      <button class="btn btn-primary" id="validate">Débloquer le protocole</button>
+      <button class="btn btn-ghost" id="reset" style="margin-left:8px;">Réinitialiser</button>
+
+      <div class="feedback" id="feedback">
+        Entre les 3 codes pour tenter de débloquer le protocole.
+      </div>
+    </div>
+
+    <!-- PANEL DROITE -->
+    <div class="panel locked" id="successPanel">
+      <h2>🎉 Mission accomplie !</h2>
+      <p style="color:#9ca3af;">
+        Vous avez stabilisé votre empreinte numérique.
+      </p>
+
+      <h3>🌱 5 actions simples pour continuer votre nettoyage</h3>
+      <ul>
+        <li>Trier ses mails 5 minutes par semaine</li>
+        <li>Désactiver la lecture automatique des vidéos</li>
+        <li>Baisser la qualité vidéo par défaut</li>
+        <li>Faire un ménage cloud mensuel</li>
+        <li>Désactiver les synchronisations inutiles</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // 🔒 Réponses masquées (Base64)
+  const EXPECTED_1 = atob("NjE1MzI0");   // 615324
+  const EXPECTED_2 = atob("REFCRUNG");   // DABECF
+  const EXPECTED_3 = atob("Q1BEQQ==");   // CPDA
+
+  const code1 = document.getElementById("code1");
+  const code2 = document.getElementById("code2");
+  const code3 = document.getElementById("code3");
+  const feedback = document.getElementById("feedback");
+  const successPanel = document.getElementById("successPanel");
+
+  document.getElementById("validate").onclick = () => {
+    const c1 = code1.value.replace(/\D/g, "");
+    const c2 = code2.value.toUpperCase().replace(/[^A-Z]/g, "");
+    const c3 = code3.value.toUpperCase().replace(/[^A-Z]/g, "");
+
+    if (c1 === EXPECTED_1 && c2 === EXPECTED_2 && c3 === EXPECTED_3) {
+      feedback.textContent = "✅ Protocole débloqué !";
+      successPanel.classList.remove("locked");
+    } else {
+      feedback.textContent = "❌ Au moins un des codes est incorrect.";
+    }
+  };
+
+  document.getElementById("reset").onclick = () => {
+    code1.value = "";
+    code2.value = "";
+    code3.value = "";
+    feedback.textContent = "Champs réinitialisés.";
+  };
+</script>
+
+</body>
+</html>
